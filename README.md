@@ -51,6 +51,12 @@ Safeguards:
 - **Rate limit** per key, failed-login throttle per address, maximum duration per command.
 - The service only listens on `127.0.0.1`. Only nginx, over HTTPS, is exposed.
 
+## Compatibility
+
+- **Works (used in practice):** Claude, Grok and GrokBot.
+- **Not tested:** ChatGPT and Gemini. To use the door, an agent must be able to send HTTPS requests with a custom `Authorization` header to your own domain. In chat tools where network access is blocked or limited to a fixed list of sites, it will not work. We have not verified either of them, so we do not claim that they work or that they cannot.
+- For part 2 (the Bridge), real-time watchers need an agent that can run a background process: only Claude and GrokBot can.
+
 ## Going live, step by step
 
 You need: a Linux server (Ubuntu), Node 18 or newer (system-wide install), nginx, `grep` with `-P`, a domain name, and the ability to add a DNS record.
