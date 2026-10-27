@@ -66,6 +66,8 @@ const srv = app.listen(0, "127.0.0.1", async () => {
   const au = await call("GET", "/api/v1/code/audit", ad.key);
   ok("audit as admin", au.s === 200 && au.j.entries.length > 10, au.s);
   ok("audit refused without admin", (await call("GET", "/api/v1/code/audit", rw.key)).s === 403);
+  const aud2 = await call("GET", "/api/v1/code/audit?limit=1000", ad.key);
+  ok("refused /audit access is logged", aud2.j.entries.some((e) => e.action === "scope" && e.route === "/audit"), aud2.j.entries.slice(-2));
   const toolsDef = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "tools", "door-tools.json"), "utf8"));
   const serverSrc = fs.readFileSync(path.join(__dirname, "..", "server.js"), "utf8");
   ok("tool definitions match the server routes", toolsDef.tools.length === 7 && toolsDef.tools.every((x) => serverSrc.includes('api.post("/' + x.path.split("/").pop() + '"')), toolsDef.tools.map((x) => x.path));

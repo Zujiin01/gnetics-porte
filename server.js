@@ -139,7 +139,10 @@ api.post("/bash", ...handler("bash", "exec", async (req, seen) => {
 }));
 
 api.get("/audit", (req, res) => {
-  if (!req.key.scopes.includes("admin")) return res.status(403).json({ error: "Scope required: admin" });
+  if (!req.key.scopes.includes("admin")) {
+    audit({ key: req.key.id, action: "scope", status: "refused", error: "scope required: admin", route: req.path, ip: req.get("x-real-ip") || req.ip });
+    return res.status(403).json({ error: "Scope required: admin" });
+  }
   res.json({ entries: readAudit(cfg.auditFile, Math.min(parseInt(req.query.limit, 10) || 100, 1000)) });
 });
 
