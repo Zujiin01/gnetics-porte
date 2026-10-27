@@ -1,0 +1,17 @@
+{
+  "name": "porte",
+  "version": "0.1.0",
+  "description": "La porte : une API HTTPS qui laisse ton agent IA (Claude, Grok, GrokBot) travailler sur ton serveur depuis ton telephone.",
+  "license": "SEE LICENSE IN LICENSE",
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "newkey": "node bin/newkey.js",
+    "test": "node test/smoke.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "engines": { "node": ">=18" }
+}

@@ -1,0 +1,7 @@
+# EXEMPLE, non installe par defaut. Pour le scope "admin" (sudo) avec le MINIMUM de droits.
+# 1. Retire NoNewPrivileges=true de /etc/systemd/system/porte.service, puis : systemctl daemon-reload && systemctl restart porte
+# 2. Copie ce fichier : sudo cp install/sudoers.example /etc/sudoers.d/porte && sudo chmod 440 /etc/sudoers.d/porte
+# 3. Valide-le : sudo visudo -cf /etc/sudoers.d/porte   (une erreur ici peut te bloquer hors de sudo : garde une session root ouverte)
+# Adapte la liste a ce que tu acceptes que l'agent fasse. Evite les jokers (*), les shells (bash, sh, su) et les editeurs.
+# Arguments exacts, sans joker : l'agent ne peut lancer que ces commandes-la, telles quelles.
+porte-agent ALL=(root) NOPASSWD: /usr/bin/systemctl status nginx, /usr/bin/systemctl reload nginx, /usr/sbin/nginx -t, /usr/bin/journalctl -u nginx --no-pager -n 50
