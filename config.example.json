@@ -1,10 +1,10 @@
 {
   "host": "127.0.0.1",
   "port": 3400,
-  "root": "/home/agent/travail",
-  "keysFile": "/var/lib/porte/keys.json",
-  "keysGroup": "porte-agent",
-  "auditFile": "/var/lib/porte/audit.jsonl",
+  "root": "/home/door-agent/work",
+  "keysFile": "/var/lib/door/keys.json",
+  "keysGroup": "door-agent",
+  "auditFile": "/var/lib/door/audit.jsonl",
   "rateLimitPerMinute": 60,
   "bashTimeoutMaxSec": 120,
   "requirePlanForRisky": true

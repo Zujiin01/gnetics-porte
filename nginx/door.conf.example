@@ -1,5 +1,5 @@
-# /etc/nginx/sites-available/porte  (remplace agent.example.com par ton domaine)
-# Certificat : sudo certbot --nginx -d agent.example.com
+# /etc/nginx/sites-available/door  (replace agent.example.com with your domain)
+# Certificate: sudo certbot --nginx -d agent.example.com
 server {
     listen 80;
     server_name agent.example.com;

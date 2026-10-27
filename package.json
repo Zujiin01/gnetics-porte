@@ -1,7 +1,7 @@
 {
-  "name": "porte",
+  "name": "mobile-server-connection",
   "version": "0.1.0",
-  "description": "La porte : une API HTTPS qui laisse ton agent IA (Claude, Grok, GrokBot) travailler sur ton serveur depuis ton telephone.",
+  "description": "The Door: an HTTPS API that lets your AI agent (Claude, Grok, GrokBot...) work on your own server from your phone. Part 1 of 3. Non-commercial license.",
   "license": "SEE LICENSE IN LICENSE",
   "private": true,
   "main": "server.js",
@@ -13,5 +13,7 @@
   "dependencies": {
     "express": "^4.21.2"
   },
-  "engines": { "node": ">=18" }
+  "engines": {
+    "node": ">=18"
+  }
 }
