@@ -6,7 +6,7 @@ A small HTTPS API that lets your AI agent (Claude, Grok, GrokBot, or any agent t
 
 > **Trilogy "Work with your AI agent from your phone".** This is **part 1 of 3**.
 > 1. **The Door** (this repository): connect your agent to your server.
-> 2. **OPS Memory** (coming soon): a memory of incidents and lessons, with the *memory first* skill, so your agent does not repeat the same mistake twice.
+> 2. **OPS Memory** (coming soon): a pattern system that your agents search before acting and enrich after every task, used as their shared memory. Comes with the *memory first* skill, so your agent does not repeat the same mistake twice.
 > 3. **The Bridge** (coming soon): let two agents talk to each other, with watchers that wake them up.
 >
 > Each part works on its own. Together they make a complete workstation you drive with your thumbs.
