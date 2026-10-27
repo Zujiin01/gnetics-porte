@@ -2,7 +2,7 @@
 
 **License: [PolyForm Noncommercial 1.0.0](LICENSE). Non-commercial use only.** For commercial use: didierjean@gnetics.ca.
 
-A small HTTPS API that lets your AI agent (Claude, Grok, GrokBot, or any agent that can make web requests) **work on your own server from your phone**, with no SSH and no computer.
+A small HTTPS API that lets your AI agent (Claude, Grok, GrokBot, or any agent that can make web requests) **work on your own server from your phone**, with no SSH and no computer. Works with Claude, Grok and GrokBot. Does not work with the ChatGPT and Gemini mobile apps (see [Compatibility](#compatibility)).
 
 > **Trilogy "Work with your AI agent from your phone".** This is **part 1 of 3**.
 > 1. **The Door** (this repository): connect your agent to your server.
@@ -54,7 +54,7 @@ Safeguards:
 ## Compatibility
 
 - **Works (used in practice):** Claude, Grok and GrokBot.
-- **Not tested:** ChatGPT and Gemini. To use the door, an agent must be able to send HTTPS requests with a custom `Authorization` header to your own domain. In chat tools where network access is blocked or limited to a fixed list of sites, it will not work. We have not verified either of them, so we do not claim that they work or that they cannot.
+- **Does not work: ChatGPT and Gemini (mobile apps).** Tested by the author: their mobile apps do not have the tools to send HTTPS requests with a custom `Authorization` header to your own domain, so they cannot use the door. This could change if they add such tools.
 - For part 2 (the Bridge), real-time watchers need an agent that can run a background process: only Claude and GrokBot can.
 
 ## Going live, step by step
