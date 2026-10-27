@@ -1,5 +1,7 @@
 # La porte
 
+**Licence : [PolyForm Noncommercial 1.0.0](LICENSE). Usage non commercial seulement.** Pour un usage commercial : didierjean@gnetics.ca.
+
 Une petite API HTTPS qui laisse ton agent IA (Claude, Grok, GrokBot, ou tout agent qui sait faire des requêtes web) **travailler sur ton serveur depuis ton téléphone**, sans SSH, sans ordinateur.
 
 > **Trilogie "Travailler avec son agent depuis son téléphone".** Ceci est la **partie 1 sur 3**.
