@@ -66,6 +66,9 @@ const srv = app.listen(0, "127.0.0.1", async () => {
   const au = await call("GET", "/api/v1/code/audit", ad.key);
   ok("audit as admin", au.s === 200 && au.j.entries.length > 10, au.s);
   ok("audit refused without admin", (await call("GET", "/api/v1/code/audit", rw.key)).s === 403);
+  const toolsDef = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "tools", "door-tools.json"), "utf8"));
+  const serverSrc = fs.readFileSync(path.join(__dirname, "..", "server.js"), "utf8");
+  ok("tool definitions match the server routes", toolsDef.tools.length === 7 && toolsDef.tools.every((x) => serverSrc.includes('api.post("/' + x.path.split("/").pop() + '"')), toolsDef.tools.map((x) => x.path));
   srv.close(); fs.rmSync(tmp, { recursive: true, force: true });
   console.log(fails ? "\n" + fails + " failure(s)" : "\nAll tests pass."); process.exit(fails ? 1 : 0);
 });

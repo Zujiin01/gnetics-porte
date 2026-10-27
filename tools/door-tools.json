@@ -1,0 +1,199 @@
+{
+  "name": "door",
+  "version": "0.1.0",
+  "base_url_example": "https://agent.example.com",
+  "auth": "Authorization: Bearer <YOUR_KEY>",
+  "optional_headers": {
+    "X-Session": "stable name for the conversation",
+    "X-Action-Plan": "JSON plan, required by risky bash commands"
+  },
+  "tools": [
+    {
+      "name": "door_read",
+      "description": "Read a text file from the work root. Returns numbered lines.",
+      "method": "POST",
+      "path": "/api/v1/code/read",
+      "scope": "read",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Path relative to the work root"
+          },
+          "offset": {
+            "type": "integer",
+            "description": "First line to return (0-based)"
+          },
+          "limit": {
+            "type": "integer",
+            "description": "Max lines (up to 5000)"
+          }
+        },
+        "required": [
+          "path"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "door_list",
+      "description": "List a directory of the work root.",
+      "method": "POST",
+      "path": "/api/v1/code/list",
+      "scope": "read",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Directory, '.' for the root"
+          }
+        },
+        "required": [
+          "path"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "door_glob",
+      "description": "Find files by name pattern (supports * and **).",
+      "method": "POST",
+      "path": "/api/v1/code/glob",
+      "scope": "read",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "pattern": {
+            "type": "string",
+            "description": "Pattern, e.g. '*.js'"
+          },
+          "cwd": {
+            "type": "string",
+            "description": "Directory to search from"
+          }
+        },
+        "required": [
+          "pattern"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "door_grep",
+      "description": "Search text with a regular expression (PCRE).",
+      "method": "POST",
+      "path": "/api/v1/code/grep",
+      "scope": "read",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "pattern": {
+            "type": "string",
+            "description": "Regular expression"
+          },
+          "path": {
+            "type": "string",
+            "description": "File or directory"
+          },
+          "glob": {
+            "type": "string",
+            "description": "Only files matching this name pattern"
+          },
+          "ignore_case": {
+            "type": "boolean",
+            "description": "Case-insensitive"
+          }
+        },
+        "required": [
+          "pattern"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "door_write",
+      "description": "Create or replace a file.",
+      "method": "POST",
+      "path": "/api/v1/code/write",
+      "scope": "write",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Path relative to the work root"
+          },
+          "content": {
+            "type": "string",
+            "description": "Full file content"
+          }
+        },
+        "required": [
+          "path",
+          "content"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "door_edit",
+      "description": "Replace text in a file. old_string must be unique unless replace_all is true.",
+      "method": "POST",
+      "path": "/api/v1/code/edit",
+      "scope": "write",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "File path"
+          },
+          "old_string": {
+            "type": "string",
+            "description": "Exact text to replace"
+          },
+          "new_string": {
+            "type": "string",
+            "description": "Replacement text"
+          },
+          "replace_all": {
+            "type": "boolean",
+            "description": "Replace every occurrence"
+          }
+        },
+        "required": [
+          "path",
+          "old_string",
+          "new_string"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "door_bash",
+      "description": "Run a shell command in the work root. Risky commands answer 428 plan_required: resend with the X-Action-Plan header (JSON: objective, command, risk, rollback).",
+      "method": "POST",
+      "path": "/api/v1/code/bash",
+      "scope": "exec",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "command": {
+            "type": "string",
+            "description": "Shell command"
+          },
+          "timeout_sec": {
+            "type": "integer",
+            "description": "Timeout in seconds (default 30, server maximum applies)"
+          }
+        },
+        "required": [
+          "command"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ]
+}

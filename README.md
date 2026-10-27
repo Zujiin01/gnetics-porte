@@ -54,8 +54,38 @@ Safeguards:
 ## Compatibility
 
 - **Works (used in practice):** Claude, Grok and GrokBot.
-- **Does not work: ChatGPT and Gemini (mobile apps).** Tested by the author: their mobile apps do not have the tools to send HTTPS requests with a custom `Authorization` header to your own domain, so they cannot use the door. This could change if they add such tools.
+- **Does not work: the ChatGPT and Gemini mobile apps.** Tested by the author: these apps do not expose the tool calls the door needs (see below), so the agent has no way to reach your server. This is a limit of those apps today, not of the door.
+- **Should work, not tested by the author:** ChatGPT and Gemini through their **API with your own key and your own agent code**, because there you define the tools yourself (function calling). See [`tools/door-tools.json`](tools/door-tools.json).
 - For part 2 (the Bridge), real-time watchers need an agent that can run a background process: only Claude and GrokBot can.
+
+## What your agent needs (tool calls)
+
+The door is plain HTTPS, so what matters is whether your agent has a tool that can do all of this:
+
+| Needed capability | Why |
+|---|---|
+| Send **HTTPS requests** (POST with a JSON body, plus GET for health) | every door route |
+| To **any domain you choose** (not only a fixed list of allowed sites) | your own server |
+| With **custom headers**: `Authorization`, and optionally `X-Session` and `X-Action-Plan` | authentication, tracking, the risky-command plan |
+| **Read the status code and the body** of the answer | to react to `401`, `403`, `428`, errors |
+| **Persistent project or system instructions** | to hold the rules in [AGENT-INSTRUCTIONS.md](AGENT-INSTRUCTIONS.md) |
+| A place to keep the **key** out of the conversation (secret field, project setting) | the key must not travel through chats |
+
+If your agent's app has a generic web or HTTP request tool with these abilities, it can use the door as is: it only needs the instructions. If it only has a sandboxed code tool without network access, or a fixed set of built-in tools, it cannot.
+
+If you build your own agent (OpenAI, Gemini, Anthropic or any other API with function calling), define these seven tools. The file [`tools/door-tools.json`](tools/door-tools.json) lists them with their parameters, in a neutral format you can convert to your provider's function-calling format:
+
+| Tool | Route | Scope |
+|---|---|---|
+| `door_read` | `POST /api/v1/code/read` | read |
+| `door_list` | `POST /api/v1/code/list` | read |
+| `door_glob` | `POST /api/v1/code/glob` | read |
+| `door_grep` | `POST /api/v1/code/grep` | read |
+| `door_write` | `POST /api/v1/code/write` | write |
+| `door_edit` | `POST /api/v1/code/edit` | write |
+| `door_bash` | `POST /api/v1/code/bash` | exec |
+
+Each tool call is one HTTPS request with the `Authorization: Bearer` header. Your code sends it and returns the JSON answer to the model.
 
 ## Going live, step by step
 
