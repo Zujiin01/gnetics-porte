@@ -7,7 +7,7 @@ A small HTTPS API that lets your AI agent (Claude, Grok, GrokBot, or any agent t
 > **Trilogy "Work with your AI agent from your phone".** This is **part 1 of 3**.
 > 1. **The Door** (this repository): connect your agent to your server.
 > 2. **[OPS Memory](https://github.com/Zujiin01/ops-memory)**: a pattern system that your agents search before acting and enrich after every task, used as their shared memory. Comes with the *memory first* skill, so your agent does not repeat the same mistake twice.
-> 3. **The Bridge** (coming soon): let two agents talk to each other, with watchers that wake them up.
+> 3. **[The Bridge](https://github.com/Zujiin01/the-bridge)**: your agents talk to each other and wake each other up, without you.
 >
 > Each part works on its own. Together they make a complete workstation you drive with your thumbs.
 
@@ -56,7 +56,7 @@ Safeguards:
 - **Works (used in practice):** Claude, Grok and GrokBot.
 - **Does not work: the ChatGPT and Gemini mobile apps.** Tested by the author: these apps do not expose the tool calls the door needs (see below), so the agent has no way to reach your server. This is a limit of those apps today, not of the door.
 - **Should work, not tested by the author:** ChatGPT and Gemini through their **API with your own key and your own agent code**, because there you define the tools yourself (function calling). See [`tools/door-tools.json`](tools/door-tools.json).
-- For part 3 (the Bridge), real-time watchers need an agent that can run a background process: only Claude and GrokBot can.
+- For part 3 ([The Bridge](https://github.com/Zujiin01/the-bridge)), the agent must be woken up when a message arrives. Used in practice with Claude and GrokBot; any agent host that can read a folder or receive a webhook should work (see its Compatibility section).
 
 ## What your agent needs (tool calls)
 
@@ -91,7 +91,7 @@ Each tool call is one HTTPS request with the `Authorization: Bearer` header. You
 
 You need: a Linux server (Ubuntu), Node 18 or newer (system-wide install), nginx, `grep` with `-P`, a domain name, and the ability to add a DNS record.
 
-1. **DNS.** At your registrar, create an `A` record pointing `agent.your-domain.com` to your server's IP address. Wait until it is active: `dig +short agent.your-domain.com`.
+1. **DNS.** At your registrar, create an `A` record pointing `agent.example.com` to your server's IP address. Wait until it is active: `dig +short agent.example.com`.
 2. **Firewall.** Open only ports 22, 80 and 443 (`sudo ufw allow OpenSSH && sudo ufw allow 'Nginx Full' && sudo ufw enable`).
 3. **Install the door.**
    ```bash
@@ -100,8 +100,8 @@ You need: a Linux server (Ubuntu), Node 18 or newer (system-wide install), nginx
    curl -s http://127.0.0.1:3400/api/v1/health
    ```
    The work root is the only directory the agent sees. To work on an existing project, copy it into that root and give `door-agent` the rights. Symbolic links that leave the root are refused.
-4. **nginx.** Copy `nginx/door.conf.example` to `/etc/nginx/sites-available/door`, replace `agent.example.com` with your domain, enable it (`sudo ln -s /etc/nginx/sites-available/door /etc/nginx/sites-enabled/`). The certificate does not exist yet on the first try: put only the port 80 block first, then run `sudo certbot --nginx -d agent.your-domain.com` (certbot adds HTTPS and automatic renewal), or put the full file back once you have the certificate. Finish with `sudo nginx -t && sudo systemctl reload nginx`.
-5. **Check from outside** (from your phone or another network): `https://agent.your-domain.com/api/v1/health` must answer `{"ok":true,...}`.
+4. **nginx.** Copy `nginx/door.conf.example` to `/etc/nginx/sites-available/door`, replace `agent.example.com` with your domain, enable it (`sudo ln -s /etc/nginx/sites-available/door /etc/nginx/sites-enabled/`). The certificate does not exist yet on the first try: put only the port 80 block first, then run `sudo certbot --nginx -d agent.example.com` (certbot adds HTTPS and automatic renewal), or put the full file back once you have the certificate. Finish with `sudo nginx -t && sudo systemctl reload nginx`.
+5. **Check from outside** (from your phone or another network): `https://agent.example.com/api/v1/health` must answer `{"ok":true,...}`.
 6. **Create a key.** Start read-only:
    ```bash
    sudo DOOR_CONFIG=/opt/door/config.json node /opt/door/bin/newkey.js --name my-phone --scopes read
